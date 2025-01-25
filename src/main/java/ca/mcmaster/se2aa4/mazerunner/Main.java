@@ -60,7 +60,6 @@ public class Main {
                     
                 }
                 m.printMaze();
-                System.out.println(m.getPathResult());
             }
             else {
                 BufferedReader reader = new BufferedReader(new FileReader(args[0]));
