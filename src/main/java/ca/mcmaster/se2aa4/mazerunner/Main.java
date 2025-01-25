@@ -24,30 +24,43 @@ public class Main {
         logger.info("** Starting Maze Runner");
 
         char [][] maze;
+        System.out.println("Ball");
         try {
             logger.info("**** Reading the maze from file " + args[0]);
 
             cmd = parser.parse(options, args);
 
             if (cmd.hasOption("i")) {
+                Maze m = null;
                 String fileInput = cmd.getOptionValue("i");
                 try (BufferedReader reader = new BufferedReader(new FileReader(fileInput))) {
+                    System.out.println("In -i flag");
                     String line = reader.readLine();
                     int counter = 0;
                     int length = line.length();
                     maze = new char[1][length]; //Initial size of maze array during reading
 
                     while (line != null) { //Reading loop
+                        System.out.println(counter);
                         if (counter != 0) { 
                             maze = resizeArray(maze, counter, length);
+                            System.out.println("Done Resizing");
                         }
-                        for (int i = 0; i < length; i++) {
+                        for (int i = 0; i < line.length(); i++) {
                             maze[counter][i] = line.charAt(i);
+                        }
+                        for (int i = line.length(); i < length; i++) { //Accounting for non-whitespace characters in the grid
+                            maze[counter][i] = ' ';
                         }
                         line = reader.readLine();
                         counter++;
                     }
+                    
+                    m = new Maze(maze, counter, length);
+                    
                 }
+                m.printMaze();
+                System.out.println(m.getPathResult());
             }
             else {
                 BufferedReader reader = new BufferedReader(new FileReader(args[0]));
@@ -71,9 +84,10 @@ public class Main {
         logger.info("** End of MazeRunner");
     }
     private static char [][] resizeArray(char [][] arr, int height, int length) {
+        System.out.println("Resizing");
         char [][] newArr = new char[height + 1][length];
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < height + 1; j++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < length; j++) {
                 newArr[i][j] = arr[i][j];
             }
         }
