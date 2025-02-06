@@ -49,7 +49,7 @@ public class Main {
                         for (int i = 0; i < line.length(); i++) {
                             maze[counter][i] = line.charAt(i);
                         }
-                        for (int i = line.length(); i < length; i++) { //Accounting for non-whitespace characters in the grid
+                        for (int i = line.length(); i < length; i++) { //Accounting for null characters in the text files
                             maze[counter][i] = ' ';
                         }
                         line = reader.readLine();

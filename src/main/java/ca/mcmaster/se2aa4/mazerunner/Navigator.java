@@ -11,13 +11,46 @@ public class Navigator {
         this.col = col;
     }
     public void turnRight() {
-
-    }
-    public void turnAround() {
-
+        if (direction == 'N') {
+            direction = 'E';
+        }
+        else if (direction == 'E') {
+            direction = 'S';
+        }
+        else if (direction == 'S') {
+            direction = 'W';
+        }
+        else if (direction == 'W') {
+            direction = 'N';
+        }
     }
     public void turnLeft() {
-
+        if (direction == 'N') {
+            direction = 'W';
+        }
+        else if (direction == 'E') {
+            direction = 'N';
+        }
+        else if (direction == 'S') {
+            direction = 'E'
+        }
+        else if (direction == 'W') {
+            direction = 'S';
+        }
+    }
+    public void moveForward() {
+        if (direction == 'N') {
+            row--;
+        }
+        else if (direction == 'E') {
+            col++;
+        }
+        else if (direction == 'S') {
+            row++;
+        }
+        else if (direction == 'W') {
+            col--;
+        }
     }
     public int getRow() {
         return row;

@@ -31,9 +31,17 @@ public class Maze {
         }
     }
 
-    private int getLeftEntrance() {
+    public int getLeftEntrance() {
         for (int i = 0; i < height; i++) {
             if (maze[i][0] == ' ') {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public int getRightEntrance() {
+        for (int i = 0; i < height; i++) {
+            if (maze[i][length - 1] == ' ') {
                 return i;
             }
         }
