@@ -2,33 +2,16 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 public class Maze {
     private char[][] maze;
-    private int length;
+    private int length; 
     private int height;
     private String path;
     private Navigator navigator;
 
     public Maze(char[][] maze, int length, int height) {
+        System.out.println(length);
         this.maze = maze;
         this.length = length;
         this.height = height;
-        //path = getPath();
-    }
-    private String getPath() {
-        navigator = new Navigator('E', getLeftEntrance(), 0);
-        
-        while (true) { 
-            if (navigator.getDirection() == 'E') {
-                if (maze[navigator.getRow() - 1][navigator.getCol()] == '#' && maze[navigator.getRow()][navigator.getCol() + 1] == ' ') {
-                    
-                }
-                else if (maze[navigator.getRow() - 1][navigator.getCol()] == '#' && maze[navigator.getRow()][navigator.getCol()+1] == '#') {
-    
-                }
-                else if (maze[navigator.getRow() - 1][navigator.getCol()] == ' ') {
-                    
-                }
-            }
-        }
     }
 
     public int getLeftEntrance() {
@@ -54,5 +37,14 @@ public class Maze {
             }
             System.out.print("\n");
         }
+    }
+    public char getTile(int row, int col) {
+        return maze[row][col];
+    }
+    public int getLength() {
+        return length;
+    }
+    public int getHeight() {
+        return height;
     }
 }

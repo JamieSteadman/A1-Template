@@ -32,7 +32,7 @@ public class Navigator {
             direction = 'N';
         }
         else if (direction == 'S') {
-            direction = 'E'
+            direction = 'E';
         }
         else if (direction == 'W') {
             direction = 'S';
@@ -57,6 +57,46 @@ public class Navigator {
     }
     public int getCol() {
         return col;
+    }
+    public int[] getRightCoordinates() {
+        int coordinates[] = new int[2];
+        if (direction == 'N') {
+            coordinates[0] = row;
+            coordinates[1] = col + 1;
+        }
+        else if (direction == 'E') {
+            coordinates[0] = row + 1;
+            coordinates[1] = col;
+        }
+        else if (direction == 'S') {
+            coordinates[0] = row;
+            coordinates[1] = col - 1;
+        }
+        else if (direction == 'W') {
+            coordinates[0] = row - 1;
+            coordinates[1] = col;
+        }
+        return coordinates;
+    }
+    public int[] getForwardCoordinates() {
+        int coordinates[] = new int[2];
+        if (direction == 'N') {
+            coordinates[0] = row - 1;
+            coordinates[1] = col;
+        }
+        else if (direction == 'E') {
+            coordinates[0] = row;
+            coordinates[1] = col + 1;
+        }
+        else if (direction == 'S') {
+            coordinates[0] = row + 1;
+            coordinates[1] = col;
+        }
+        else if (direction == 'W') {
+            coordinates[0] = row;
+            coordinates[1] = col - 1;
+        }
+        return coordinates;
     }
     public char getDirection() {
         return direction;

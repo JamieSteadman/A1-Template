@@ -1,18 +1,20 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Main {
-
-    private static final Logger logger = LogManager.getLogger(); 
+    private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
         Options options = new Options();
@@ -20,75 +22,82 @@ public class Main {
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd;
-        
+
         logger.info("** Starting Maze Runner");
-
-        char [][] maze;
         System.out.println("Ball");
-        try {
-            logger.info("**** Reading the maze from file " + args[0]);
 
+        // Debug arguments
+        for (int i = 0; i < args.length; i++) {
+            System.out.println("Arg " + i + ": " + args[i]);
+        }
+
+        try {
             cmd = parser.parse(options, args);
 
-            if (cmd.hasOption("i")) {
-                Maze m = null;
-                String fileInput = cmd.getOptionValue("i");
-                try (BufferedReader reader = new BufferedReader(new FileReader(fileInput))) {
-                    System.out.println("In -i flag");
-                    String line = reader.readLine();
-                    int counter = 0;
-                    int length = line.length();
-                    maze = new char[1][length]; //Initial size of maze array during reading
+            if (!cmd.hasOption("i")) {
+                logger.error("No input file provided. Use -i <filename>");
+                return;
+            }
 
-                    while (line != null) { //Reading loop
-                        System.out.println(counter);
-                        if (counter != 0) { 
-                            maze = resizeArray(maze, counter, length);
-                            System.out.println("Done Resizing");
-                        }
-                        for (int i = 0; i < line.length(); i++) {
-                            maze[counter][i] = line.charAt(i);
-                        }
-                        for (int i = line.length(); i < length; i++) { //Accounting for null characters in the text files
-                            maze[counter][i] = ' ';
-                        }
-                        line = reader.readLine();
-                        counter++;
-                    }
-                    
-                    m = new Maze(maze, counter, length);
-                    
-                }
-                m.printMaze();
+            String fileInput = cmd.getOptionValue("i");
+            logger.info("**** Reading the maze from file " + fileInput);
+
+            File file = new File(fileInput);
+            if (!file.exists()) {
+                logger.error("File not found: " + fileInput);
+                return;
             }
-            else {
-                BufferedReader reader = new BufferedReader(new FileReader(args[0]));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    for (int idx = 0; idx < line.length(); idx++) {
-                        if (line.charAt(idx) == '#') {
-                            logger.trace("WALL ");
-                        } else if (line.charAt(idx) == ' ') {
-                            logger.trace("PASS ");
-                        }
-                    }
-                    logger.trace(System.lineSeparator());
+
+            char[][] maze;
+            System.out.println("Reading from file");
+            try (BufferedReader reader = new BufferedReader(new FileReader(fileInput))) {
+                System.out.println("Reading from file");
+                String line = reader.readLine();
+                if (line == null) {
+                    logger.error("Empty maze file.");
+                    return;
                 }
+
+                int counter = 0;
+                int length = line.length();
+                System.out.println(line);
+                System.out.println(length);
+                maze = new char[1][length];
+
+                while (line != null) {
+                    if (counter != 0) {
+                        maze = resizeArray(maze, counter, length);
+                    }
+                    for (int i = 0; i < line.length(); i++) {
+                        maze[counter][i] = line.charAt(i);
+                    }
+                    for (int i = line.length(); i < length; i++) {
+                        maze[counter][i] = ' ';
+                    }
+                    line = reader.readLine();
+                    counter++;
+                }
+
+                System.out.println(length);
+                Maze m = new Maze(maze, length, counter);
+                MazeSolver ms = new MazeSolver(m);
+                ms.solveMaze();
+                System.out.println("Printing Maze:");
+                System.out.println(ms.printPath());
+
+            } catch (IOException e) {
+                logger.error("Error reading file: ", e);
             }
-        } catch(Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+        } catch (ParseException e) {
+            logger.error("Command-line parsing error: ", e);
         }
-        logger.info("**** Computing path");
-        logger.info("PATH NOT COMPUTED");
-        logger.info("** End of MazeRunner");
     }
-    private static char [][] resizeArray(char [][] arr, int height, int length) {
+
+    private static char[][] resizeArray(char[][] arr, int height, int length) {
         System.out.println("Resizing");
-        char [][] newArr = new char[height + 1][length];
+        char[][] newArr = new char[height + 1][length];
         for (int i = 0; i < height; i++) {
-            for (int j = 0; j < length; j++) {
-                newArr[i][j] = arr[i][j];
-            }
+            System.arraycopy(arr[i], 0, newArr[i], 0, length);
         }
         return newArr;
     }
