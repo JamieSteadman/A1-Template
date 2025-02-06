@@ -4,13 +4,11 @@ public class MazeSolver {
     private Maze maze;
     private Navigator navigator;
     private String path;
-    private String factorizedPath;
 
     public MazeSolver(Maze maze) {
         this.maze = maze;
         this.navigator = new Navigator('E', maze.getLeftEntrance(), 0);
         this.path = "";
-        this.factorizedPath = "";
     }
     public void solveMaze() {
         while (true) { 
@@ -69,7 +67,27 @@ public class MazeSolver {
         //End case
         return navigator.getCol() == maze.getLength() - 1  && navigator.getDirection() == 'E' && input.charAt(length - 1) == 'F';
     }
-    public String printPath() {
+    public String getPath() {
         return path;
+    }
+    public String getFactorizedPath() {
+        String factorizedPath = "";
+        for (int i = 0; i < path.length(); i++) {
+            for (int j = i + 1; j < path.length(); j++) {
+                if (path.charAt(j) != path.charAt(i)) {
+                    if (j - i > 1) {
+                        factorizedPath += Integer.toString(j - i);
+                    }
+                    i = j - 1;
+                    break;
+                }
+                else if (j == path.length() - 1) { //Edge case for factorizing at the end of the array
+                    factorizedPath += Integer.toString(j - i + 1);
+                    i = j;
+                }
+            }
+            factorizedPath += path.charAt(i) + " ";
+        }
+        return factorizedPath;
     }
 }

@@ -96,7 +96,7 @@ public class Main {
                 }
                 ms.solveMaze();
                 System.out.println("Printing Maze:");
-                System.out.println(ms.printPath());
+                System.out.println(ms.getFactorizedPath());
                 
             } catch (IOException e) {
                 logger.error("Error reading file: ", e);
