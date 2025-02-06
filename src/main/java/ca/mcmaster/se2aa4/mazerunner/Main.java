@@ -18,52 +18,53 @@ public class Main {
 
     public static void main(String[] args) {
         Options options = new Options();
-        options.addOption("i", true, "Input file for maze path");
+        options.addOption("i", true, "Input file for maze");
+        options.addOption("p", true, "Path string");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd;
 
         logger.info("** Starting Maze Runner");
-        System.out.println("Ball");
-
-        // Debug arguments
-        for (int i = 0; i < args.length; i++) {
-            System.out.println("Arg " + i + ": " + args[i]);
-        }
-
+        
+        String fileInput = null;
+        String pathString = null;
+        
         try {
             cmd = parser.parse(options, args);
-
-            if (!cmd.hasOption("i")) {
+            
+            if (cmd.hasOption("i")) {
+                fileInput = cmd.getOptionValue("i");
+                logger.info("**** Reading the maze from file: " + fileInput);
+            }
+            
+            if (cmd.hasOption("p")) {
+                pathString = cmd.getOptionValue("p");
+                logger.info("**** Path string provided: " + pathString);
+            }
+            
+            if (fileInput == null) {
                 logger.error("No input file provided. Use -i <filename>");
                 return;
             }
-
-            String fileInput = cmd.getOptionValue("i");
-            logger.info("**** Reading the maze from file " + fileInput);
-
+            
             File file = new File(fileInput);
             if (!file.exists()) {
                 logger.error("File not found: " + fileInput);
                 return;
             }
-
+            
             char[][] maze;
-            System.out.println("Reading from file");
             try (BufferedReader reader = new BufferedReader(new FileReader(fileInput))) {
-                System.out.println("Reading from file");
                 String line = reader.readLine();
                 if (line == null) {
                     logger.error("Empty maze file.");
                     return;
                 }
-
+                
                 int counter = 0;
                 int length = line.length();
-                System.out.println(line);
-                System.out.println(length);
                 maze = new char[1][length];
-
+                
                 while (line != null) {
                     if (counter != 0) {
                         maze = resizeArray(maze, counter, length);
@@ -77,14 +78,26 @@ public class Main {
                     line = reader.readLine();
                     counter++;
                 }
-
-                System.out.println(length);
+                
                 Maze m = new Maze(maze, length, counter);
                 MazeSolver ms = new MazeSolver(m);
+                
+                
+                if (pathString != null) {
+                    boolean validPath = ms.verifyPath(pathString);
+                    if (validPath == true) {
+                        System.out.println("Path Works");
+                        return;
+                    }
+                    else {
+                        System.out.println("Path Does Not Work");
+                        return;
+                    }
+                }
                 ms.solveMaze();
                 System.out.println("Printing Maze:");
                 System.out.println(ms.printPath());
-
+                
             } catch (IOException e) {
                 logger.error("Error reading file: ", e);
             }
@@ -94,7 +107,6 @@ public class Main {
     }
 
     private static char[][] resizeArray(char[][] arr, int height, int length) {
-        System.out.println("Resizing");
         char[][] newArr = new char[height + 1][length];
         for (int i = 0; i < height; i++) {
             System.arraycopy(arr[i], 0, newArr[i], 0, length);

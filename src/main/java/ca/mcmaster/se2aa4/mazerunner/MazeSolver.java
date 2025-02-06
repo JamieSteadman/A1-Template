@@ -4,18 +4,17 @@ public class MazeSolver {
     private Maze maze;
     private Navigator navigator;
     private String path;
+    private String factorizedPath;
 
     public MazeSolver(Maze maze) {
         this.maze = maze;
         this.navigator = new Navigator('E', maze.getLeftEntrance(), 0);
         this.path = "";
+        this.factorizedPath = "";
     }
     public void solveMaze() {
         while (true) { 
             if (navigator.getCol() == maze.getLength() - 1 && navigator.getDirection() == 'E') {
-                System.out.println(maze.getLength());
-                System.out.println(navigator.getCol());
-                path += "F";
                 break;
             }
             int[] rightCoordinates = navigator.getRightCoordinates();
@@ -37,6 +36,38 @@ public class MazeSolver {
                 path += "RF";
             }
         }
+    }
+    public boolean verifyPath(String input) { //Checks if a given path gets the navigator through the maze
+        int length = input.length();
+        int counter = 0;
+
+        for (int i = 0; i < length; i++) {
+            //Navigation
+            if (input.charAt(i) == 'F') {
+                navigator.moveForward();
+            }
+            else if (input.charAt(i) == 'R') {
+                navigator.turnRight();
+            }
+            else if (input.charAt(i) == 'L') {
+                navigator.turnLeft();
+            }
+
+            //Boundary cases
+            if (navigator.getRow() <= 0 || navigator.getRow() >= maze.getHeight() - 1) { 
+                return false;
+            }
+            if (navigator.getCol() < 0 || navigator.getCol() > length) {
+                return false;
+            }
+
+            //Regular case
+            if (maze.getTile(navigator.getRow(), navigator.getCol()) == '#') {
+                return false;
+            }
+        }
+        //End case
+        return navigator.getCol() == maze.getLength() - 1  && navigator.getDirection() == 'E' && input.charAt(length - 1) == 'F';
     }
     public String printPath() {
         return path;
