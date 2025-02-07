@@ -25,46 +25,53 @@ public class Main {
         CommandLine cmd;
 
         logger.info("** Starting Maze Runner");
-        
+
         String fileInput = null;
         String pathString = null;
-        
+
         try {
             cmd = parser.parse(options, args);
-            
-            if (cmd.hasOption("i")) {
-                fileInput = cmd.getOptionValue("i");
-                logger.info("**** Reading the maze from file: " + fileInput);
+
+            // Handle missing arguments
+            if (!cmd.hasOption("i")) {
+                logger.error("No input file provided. Use -i <filename>");
+                System.err.println("Error: No input file provided. Use -i <filename>");
+                return;
             }
-            
+            fileInput = cmd.getOptionValue("i");
+
             if (cmd.hasOption("p")) {
                 pathString = cmd.getOptionValue("p");
+                if (pathString.isEmpty()) {
+                    logger.error("Path string cannot be empty.");
+                    System.err.println("Error: Path string cannot be empty.");
+                    return;
+                }
                 logger.info("**** Path string provided: " + pathString);
             }
-            
-            if (fileInput == null) {
-                logger.error("No input file provided. Use -i <filename>");
-                return;
-            }
-            
+
+            // Validate file existence
             File file = new File(fileInput);
-            if (!file.exists()) {
-                logger.error("File not found: " + fileInput);
+            if (!file.exists() || !file.isFile()) {
+                logger.error("File not found or not a valid file: " + fileInput);
+                System.err.println("Error: File not found or invalid file: " + fileInput);
                 return;
             }
-            
+
+            // Read maze file
             char[][] maze;
-            try (BufferedReader reader = new BufferedReader(new FileReader(fileInput))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String line = reader.readLine();
                 if (line == null) {
                     logger.error("Empty maze file.");
+                    System.err.println("Error: Maze file is empty.");
                     return;
                 }
-                
+
                 int counter = 0;
                 int length = line.length();
                 maze = new char[1][length];
-                
+
                 while (line != null) {
                     if (counter != 0) {
                         maze = resizeArray(maze, counter, length);
@@ -78,31 +85,35 @@ public class Main {
                     line = reader.readLine();
                     counter++;
                 }
-                
+
                 Maze m = new Maze(maze, length, counter);
                 MazeSolver ms = new MazeSolver(m);
-                
-                
+
                 if (pathString != null) {
                     boolean validPath = ms.verifyPath(pathString);
-                    if (validPath == true) {
+                    if (validPath) {
                         System.out.println("Path Works");
-                        return;
-                    }
-                    else {
+                    } else {
                         System.out.println("Path Does Not Work");
-                        return;
                     }
+                    return;
                 }
+
+                // Solve maze and print solution
                 ms.solveMaze();
-                System.out.println("Printing Maze:");
                 System.out.println(ms.getFactorizedPath());
-                
+
             } catch (IOException e) {
                 logger.error("Error reading file: ", e);
+                System.err.println("Error: Unable to read the file. Check file permissions.");
             }
+
         } catch (ParseException e) {
             logger.error("Command-line parsing error: ", e);
+            System.err.println("Error: Invalid command-line arguments. Use -i <filename> [-p <path>]");
+        } catch (Exception e) {
+            logger.error("Unexpected error: ", e);
+            System.err.println("An unexpected error occurred. Check logs for details.");
         }
     }
 
