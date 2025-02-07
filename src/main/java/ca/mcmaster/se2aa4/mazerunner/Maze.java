@@ -6,7 +6,7 @@ public class Maze {
     protected int height;
     protected String path;
 
-    public Maze(char[][] maze, int length, int height) {
+    public Maze(char[][] maze, int length, int height) { //Constructor method
         this.maze = maze;
         this.length = length;
         this.height = height;
