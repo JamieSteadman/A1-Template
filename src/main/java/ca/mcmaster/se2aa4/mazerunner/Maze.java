@@ -1,14 +1,12 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 public class Maze {
-    private char[][] maze;
-    private int length; 
-    private int height;
-    private String path;
-    private Navigator navigator;
+    protected char[][] maze;
+    protected int length; 
+    protected int height;
+    protected String path;
 
     public Maze(char[][] maze, int length, int height) {
-        System.out.println(length);
         this.maze = maze;
         this.length = length;
         this.height = height;

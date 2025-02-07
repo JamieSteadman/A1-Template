@@ -1,9 +1,9 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 public class MazeSolver {
-    private Maze maze;
-    private Navigator navigator;
-    private String path;
+    protected Maze maze;
+    protected Navigator navigator;
+    protected String path;
 
     public MazeSolver(Maze maze) {
         this.maze = maze;

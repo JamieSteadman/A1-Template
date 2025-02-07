@@ -1,9 +1,9 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 public class Navigator {
-    private char direction = ' ';
-    private int row;
-    private int col;
+    protected char direction = ' ';
+    protected int row;
+    protected int col;
 
     public Navigator (char direction, int row, int col) {
         this.direction = direction;
