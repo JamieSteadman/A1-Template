@@ -14,9 +14,9 @@ class MazeTest {
     void setUp() throws IOException {
         char[][] testMaze = {
             {'#', '#', '#', '#', '#'},
-            {'#', ' ', ' ', ' ', '#'},
+            {'#', ' ', ' ', ' ', ' '},
             {'#', ' ', '#', ' ', '#'},
-            {'#', ' ', ' ', ' ', '#'},
+            {' ', ' ', ' ', ' ', '#'},
             {'#', '#', '#', '#', '#'}
         };
         maze = new Maze(testMaze, 5, 5);
@@ -37,7 +37,7 @@ class MazeTest {
     
     @Test
     void testValidPathDetection() {
-        String validPath = "FFRFFLFF";
+        String validPath = "FFFLFFRF";
         MazeSolver solver = new MazeSolver(maze);
         assertTrue(solver.verifyPath(validPath));
     }
