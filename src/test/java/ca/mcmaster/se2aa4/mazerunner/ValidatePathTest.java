@@ -21,8 +21,14 @@ class ValidatePathTest {
         maze = new Maze(testMaze, 5, 5);
     }
     @Test
-    void testOutOfBoundsPath() {
+    void testGoingOutEntrance() {
         path = "LLF";
+        MazeSolver mazeSolver = new MazeSolver(maze);
+        assertFalse(mazeSolver.verifyPath(path));
+    }
+    @Test
+    void overShootingExit() { //Test if the path goes beyond the maze exit
+        path = "FRFFLFFLFRFF";
         MazeSolver mazeSolver = new MazeSolver(maze);
         assertFalse(mazeSolver.verifyPath(path));
     }

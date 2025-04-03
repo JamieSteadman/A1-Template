@@ -52,10 +52,10 @@ public class MazeSolver {
             }
 
             //Boundary cases
-            if (navigator.getRow() <= 0 || navigator.getRow() >= maze.getHeight() - 1) { 
+            if (navigator.getRow() <= 0 || navigator.getRow() >= maze.getHeight() - 1) {
                 return false;
             }
-            if (navigator.getCol() < 0 || navigator.getCol() > length) {
+            if (navigator.getCol() < 0 || navigator.getCol() > maze.getLength() - 1) {
                 return false;
             }
 
