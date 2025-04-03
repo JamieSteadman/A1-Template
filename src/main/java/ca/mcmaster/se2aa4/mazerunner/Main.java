@@ -89,20 +89,21 @@ public class Main {
                 Maze m = new Maze(maze, length, counter);
                 MazeSolver ms = new MazeSolver(m);
 
+                
                 if (pathString != null) {
-                    boolean validPath = ms.verifyPath(pathString);
-                    if (validPath) {
-                        System.out.println("Path Works");
+                    ValidatePathCommand vp = new ValidatePathCommand(ms, pathString);
+                    vp.execute();
+                    if (vp.getResult()) {
+                        System.out.println("Path is valid.");
                     } else {
-                        System.out.println("Path Does Not Work");
+                        System.out.println("Path is invalid.");
                     }
-                    return;
                 }
 
                 // Solve maze and print solution
-                ms.solveMaze();
-                System.out.println(ms.getFactorizedPath());
-
+                GeneratePathCommand gp = new GeneratePathCommand(ms);
+                gp.execute();
+                System.out.println(gp.getResult());
             } catch (IOException e) {
                 logger.error("Error reading file: ", e);
                 System.err.println("Error: Unable to read the file. Check file permissions.");
