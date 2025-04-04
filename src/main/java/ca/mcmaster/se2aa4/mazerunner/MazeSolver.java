@@ -84,4 +84,8 @@ public abstract class MazeSolver implements Solver{
         }
         return factorizedPath;
     }
+    //Testing purposes
+    public Navigator getNavigatorCopy() { 
+        return new Navigator(navigator.getDirection(), navigator.getRow(), navigator.getCol());
+    }
 }
