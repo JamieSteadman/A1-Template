@@ -23,27 +23,27 @@ class ValidatePathTest {
     @Test
     void testGoingOutEntrance() {
         path = "LLF";
-        MazeSolver mazeSolver = new MazeSolver(maze);
+        MazeSolver mazeSolver = new RightHandAlgorithm(maze);
         assertFalse(mazeSolver.verifyPath(path));
     }
     @Test
     void overShootingExit() { //Test if the path goes beyond the maze exit
         path = "FRFFLFFLFRFF";
-        MazeSolver mazeSolver = new MazeSolver(maze);
+        MazeSolver mazeSolver = new RightHandAlgorithm(maze);
         assertFalse(mazeSolver.verifyPath(path));
     }
 
     @Test
     void testPathLeadingToWall() {
         path = "FFFFFFFF";
-        MazeSolver mazeSolver = new MazeSolver(maze);
+        MazeSolver mazeSolver = new RightHandAlgorithm(maze);
         assertFalse(mazeSolver.verifyPath(path));
     }
 
     @Test
     void testPathReachingExit() {
         path = "FRFFLFFLFRF";
-        MazeSolver mazeSolver = new MazeSolver(maze);
+        MazeSolver mazeSolver = new RightHandAlgorithm(maze);
         assertTrue(mazeSolver.verifyPath(path));
     }
 }

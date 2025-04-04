@@ -18,7 +18,7 @@ class PathGenerationTest {
             {'#', '#', '#', '#', '#'}
         };
         maze = new Maze(testMaze, 5, 5);
-        mazeSolver = new MazeSolver(maze);
+        mazeSolver = new RightHandAlgorithm(maze);
     }
 
     @Test

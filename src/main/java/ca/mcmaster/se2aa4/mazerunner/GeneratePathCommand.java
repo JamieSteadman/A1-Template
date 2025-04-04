@@ -11,7 +11,7 @@ public class GeneratePathCommand implements Command {
 
     @Override
     public void execute() {
-        mazeSolver.solveMaze();
+        mazeSolver.perform();
         generatedPath = mazeSolver.getFactorizedPath();
     }
 

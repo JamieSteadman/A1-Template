@@ -38,14 +38,14 @@ class MazeTest {
     @Test
     void testValidPathDetection() {
         String validPath = "FFFLFFRF";
-        MazeSolver solver = new MazeSolver(maze);
+        MazeSolver solver = new RightHandAlgorithm(maze);
         assertTrue(solver.verifyPath(validPath));
     }
     
     @Test
     void testInvalidPathDetection() {
         String invalidPath = "FFFFF";
-        MazeSolver solver = new MazeSolver(maze);
+        MazeSolver solver = new RightHandAlgorithm(maze);
         assertFalse(solver.verifyPath(invalidPath));
     }
 }
